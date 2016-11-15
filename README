@@ -1,0 +1,8 @@
+
+APC 524 / AST 506 / MAE 506 Software engineering for scientific computing
+Assignment 4: Parallel programming with OpenMP and MPI
+
+Author: Hao Zhang, MAE, Princeton University
+Date: 11/15/2016
+
+This project solves unsteady heat equation with both serial codes and parallel computing. A comparison between OpenMP and MPI is also presented.
