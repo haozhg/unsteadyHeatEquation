@@ -3,9 +3,6 @@ close all
 clear all
 clc
 
-%% add function
-addpath('~/Google Drive/Code-Data-Results/DMDmatlab/Plotfunc');
-
 %% read data
 T = csvread('~/Google Drive/Fall2016/APC524/HW4/unsteadyHeatEquation/heat_serial_64.dat');
 [nx,~] = size(T);
@@ -14,7 +11,7 @@ x = linspace(0,pi,nx);
 y = linspace(0,pi,nx);
 [X, Y] = meshgrid(x,y);
 
-%% visualize data, surface
+%% visualize data, 3D surface
 figure
 %contourf(X,Y,T,1000,'LineStyle','none')
 surf(X,Y,T,'LineStyle','none')
@@ -27,7 +24,8 @@ xlim([0,pi]), ylim([0,pi]), zlim([0,1])
 set(gca,'FontSize',20,'LineWidth',2)
 set(gcf, 'Color', 'w');
 saveas(gcf,'heat_serial_64.png');
-%% visualize data, contourf
+
+%% visualize data, 2D contourf
 figure
 contourf(X,Y,T,100,'LineStyle','none')
 %surf(X,Y,T)
@@ -37,14 +35,4 @@ colormap(jet), colorbar
 axis equal, box on
 set(gca,'FontSize',20,'LineWidth',2)
 set(gcf, 'Color', 'w');
-%%
-export_fig('heat_serial_28.pdf');
-
-%% check boundary conditon
-figure, plot(x,T(1,:),x,T(end,:),'LineWidth',2)
-xlim([0,pi])
-xlabel('x'), ylabel('T')
-legend('T(x,y=0)','T(x,y=\pi)')
-box on
-set(gca,'FontSize',20,'LineWidth',2)
-set(gcf, 'Color', 'w');
+saveas(gcf,'heat_serial_64.png');

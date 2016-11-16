@@ -1,0 +1,10 @@
+averageT.o: averageT.cc averageT.h doubleArray.h
+doubleArray.o: doubleArray.cc doubleArray.h
+heat_omp.o: heat_omp.cc averageT.h doubleArray.h initializeT.h \
+  updateTomp.h writeFile.h
+heat_serial.o: heat_serial.cc averageT.h doubleArray.h initializeT.h \
+  updateTserial.h writeFile.h
+initializeT.o: initializeT.cc initializeT.h doubleArray.h
+testModule.o: testModule.cc
+updateTserial.o: updateTserial.cc updateTserial.h doubleArray.h
+writeFile.o: writeFile.cc writeFile.h doubleArray.h
