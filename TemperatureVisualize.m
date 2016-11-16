@@ -7,7 +7,7 @@ clc
 addpath('~/Google Drive/Code-Data-Results/DMDmatlab/Plotfunc');
 
 %% read data
-T = csvread('~/Google Drive/Fall2016/APC524/HW4/unsteadyHeatEquation/Temperature128.dat');
+T = csvread('~/Google Drive/Fall2016/APC524/HW4/unsteadyHeatEquation/heat_serial_64.dat');
 [nx,~] = size(T);
 Tmean = mean(mean(T));
 x = linspace(0,pi,nx);
@@ -26,6 +26,7 @@ xlim([0,pi]), ylim([0,pi]), zlim([0,1])
 %axis equal, box on
 set(gca,'FontSize',20,'LineWidth',2)
 set(gcf, 'Color', 'w');
+saveas(gcf,'heat_serial_64.png');
 %% visualize data, contourf
 figure
 contourf(X,Y,T,100,'LineStyle','none')
@@ -37,7 +38,7 @@ axis equal, box on
 set(gca,'FontSize',20,'LineWidth',2)
 set(gcf, 'Color', 'w');
 %%
-export_fig('Temperature128.pdf');
+export_fig('heat_serial_28.pdf');
 
 %% check boundary conditon
 figure, plot(x,T(1,:),x,T(end,:),'LineWidth',2)

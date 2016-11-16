@@ -1,4 +1,12 @@
-#include "heat_serial_lib.h"
+#include "averageT.h"
+#include "doubleArray.h"
+#include "initializeT.h"
+#include "updateTserial.h"
+#include "writeFile.h"
+#include <cmath>
+#include <stdio.h>
+#include <stdlib.h>
+using namespace std;
 
 int main(int argc, char *argv[]) {
   // input check
@@ -30,15 +38,17 @@ int main(int argc, char *argv[]) {
   initializeTemperature(Told, nx, dx);
 
   // solve heat equation
-  solveTemperature(T, Told, k, nx, nt, dx, dt);
+  for (int n = 0; n < nt; n++) {
+    updateTemperatureSerial(Told, T, k, nx, dx, dt);
+  }
 
   // average Temperature
   double aveTemp = averageTemperature(T, nx);
   printf("Volume average temperature = %.4f\n", aveTemp);
 
   // write final temperature to files
-  char fileName[20];
-  sprintf(fileName, "Temperature%d.dat", nx);
+  char fileName[50];
+  sprintf(fileName, "heat_serial_%d.dat", nx);
   // string fileName = "Temperature.dat";
   writerFile(fileName, T, nx);
 
