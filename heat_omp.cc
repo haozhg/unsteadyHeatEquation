@@ -4,6 +4,7 @@
 #include "updateTomp.h"
 #include "writeFile.h"
 #include <cmath>
+#include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 using namespace std;
@@ -29,6 +30,7 @@ int main(int argc, char *argv[]) {
 
   // time start
   clock_t start = clock();
+  // double start = omp_get_wtime();
 
   // allocate memory
   doubleArray T = allocateArray(nx);
@@ -39,14 +41,18 @@ int main(int argc, char *argv[]) {
   initializeTemperature(Told, nx, dx);
 
   // solve heat equation
-  omp_set_num_threads(nthreads);
+  doubleArray Ttemp;
   for (int n = 0; n < nt; n++) {
-    updateTemperatureOMP(Told, T, k, nx, dx, dt);
+    updateTemperatureOMP(Told, T, k, nx, dx, dt, nthreads);
+    // switch old and new Temperature
+    Ttemp = Told;
+    Told = T;
+    T = Ttemp;
   }
 
   // average Temperature
   double aveTemp = averageTemperature(T, nx);
-  printf("Volume average temperature = %.4f\n", aveTemp);
+  printf("Average temperature = %.4f\n", aveTemp);
 
   // write final temperature to files
   char fileName[50];
@@ -61,7 +67,10 @@ int main(int argc, char *argv[]) {
   // time stop
   clock_t stop = clock();
   double elapsed = (double)(stop - start) / CLOCKS_PER_SEC;
-  printf("Time elapsed in seconds: %.4f\n", elapsed);
+  printf("nthreads = %d, nx= %d, time [seconds] = %.4f\n", nthreads, nx,
+         elapsed);
+  // printf("nthreads = %d, nx= %d, time [seconds] = %.4f\n", nthreads, nx,
+  //        omp_get_wtime() - start);
 
   // end the program
   return 0;

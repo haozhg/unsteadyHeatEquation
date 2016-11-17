@@ -38,13 +38,18 @@ int main(int argc, char *argv[]) {
   initializeTemperature(Told, nx, dx);
 
   // solve heat equation
+  doubleArray Ttemp;
   for (int n = 0; n < nt; n++) {
     updateTemperatureSerial(Told, T, k, nx, dx, dt);
+    // switch old and new Temperature
+    Ttemp = Told;
+    Told = T;
+    T = Ttemp;
   }
 
   // average Temperature
   double aveTemp = averageTemperature(T, nx);
-  printf("Volume average temperature = %.4f\n", aveTemp);
+  printf("Average temperature = %.4f\n", aveTemp);
 
   // write final temperature to files
   char fileName[50];
@@ -59,7 +64,7 @@ int main(int argc, char *argv[]) {
   // time stop
   clock_t stop = clock();
   double elapsed = (double)(stop - start) / CLOCKS_PER_SEC;
-  printf("Time elapsed in seconds: %.4f\n", elapsed);
+  printf("nx = %d, time [seconds] = %.4f\n", nx, elapsed);
 
   // end the program
   return 0;

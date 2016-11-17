@@ -1,4 +1,4 @@
-//#include "doubleArray.h"
+#include "doubleArray.h"
 //#include "initializeT.h"
 //#include "writeFile.h"
 //#include "averageT.h"
@@ -6,10 +6,10 @@
 #include <stdio.h>
 
 int main() {
-  // int nx = 10;
-  // doubleArray T = allocateArray(nx);
-  // freeArray(T, nx);
-  // printf("doubleArray.h Success!\n");
+  int nx = 10;
+  doubleArray T = allocateArray(nx);
+  freeArray(T, nx);
+  printf("doubleArray.h Success!\n");
 
   // int nx = 10;
   // double dx = 0.1;

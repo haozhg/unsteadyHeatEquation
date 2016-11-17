@@ -3,6 +3,7 @@
 #include "doubleArray.h"
 
 int updateTemperatureOMP(doubleArray Told, doubleArray T, const double k,
-                         const int nx, const double dx, const double dt);
+                         const int nx, const double dx, const double dt,
+                         const int nthreads);
 
 #endif // UPDATETSERIAL_H_

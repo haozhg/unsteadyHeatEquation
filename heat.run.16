@@ -1,0 +1,19 @@
+#!/bin/bash
+# Parallel job using 16 processors:
+#SBATCH -N 2
+#SBATCH --ntasks-per-node=8
+#SBATCH -t 0:15:00
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --mail-type=fail
+#SBATCH --mail-user=haozhang@princeton.edu
+
+# Make sure you are in the correct directory
+cd ~/APC524/HW4/unsteadyHeatEquation
+
+# Load openmpi environment
+module load openmpi
+for nx in 32 64 128
+do
+    ./heat_omp $nx 16 > heat_omp.$nx.16.out
+done
