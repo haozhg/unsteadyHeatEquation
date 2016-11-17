@@ -4,7 +4,7 @@ clear all
 clc
 
 %% read data
-T = csvread('~/Google Drive/Fall2016/APC524/HW4/unsteadyHeatEquation/heat_omp_64.dat');
+T = csvread('heat_omp_128.dat');
 [nx,~] = size(T);
 Tmean = mean(mean(T));
 x = linspace(0,pi,nx);

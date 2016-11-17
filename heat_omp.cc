@@ -26,43 +26,45 @@ int main(int argc, char *argv[]) {
   // for numerical stability, dt < dx^2/(4k)
   const double dt = 0.5 * dx * dx / (4 * k);
   const int nt = (int)t / dt;
-  printf("k=%f,x=%f,t=%f,nx=%d,nt=%d,dx=%f,dt=%f\n", k, PI, t, nx, nt, dx, dt);
+  printf("k=%f, x=%f, t=%f, nx=%d, nt=%d, dx=%f, dt=%f\n", k, PI, t, nx, nt, dx,
+         dt);
 
   // time start
   clock_t start = clock();
   // double start = omp_get_wtime();
 
   // allocate memory
-  doubleArray T = allocateArray(nx);
-  doubleArray Told = allocateArray(nx);
+  doubleArray next = allocateArray(nx);
+  doubleArray current = allocateArray(nx);
 
   // initialize Temperature
-  initializeTemperature(T, nx, dx);
-  initializeTemperature(Told, nx, dx);
+  initializeTemperature(next, nx, dx);
+  initializeTemperature(current, nx, dx);
 
   // solve heat equation
-  doubleArray Ttemp;
+  // omp_set_dynamic(0);
+  omp_set_num_threads(nthreads); // set the number of threads
+  doubleArray ptrTemp;
   for (int n = 0; n < nt; n++) {
-    updateTemperatureOMP(Told, T, k, nx, dx, dt, nthreads);
+    updateTemperatureOMP(current, next, k, nx, dx, dt);
     // switch old and new Temperature
-    Ttemp = Told;
-    Told = T;
-    T = Ttemp;
+    ptrTemp = current;
+    current = next;
+    next = ptrTemp;
   }
 
   // average Temperature
-  double aveTemp = averageTemperature(T, nx);
+  double aveTemp = averageTemperature(next, nx);
   printf("Average temperature = %.4f\n", aveTemp);
 
   // write final temperature to files
   char fileName[50];
-  sprintf(fileName, "heat_omp_%d.dat", nx);
-  // string fileName = "Temperature.dat";
-  writerFile(fileName, T, nx);
+  sprintf(fileName, "heat_omp_%d_%d.dat", nx, nthreads);
+  writerFile(fileName, next, nx);
 
   // free memroy
-  freeArray(Told, nx);
-  freeArray(T, nx);
+  freeArray(current, nx);
+  freeArray(next, nx);
 
   // time stop
   clock_t stop = clock();
