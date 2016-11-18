@@ -26,10 +26,9 @@ int freeArray(doubleArray array, const int nx) {
 }
 
 int initializeTemperature(doubleArray T, const int nx, const double dx) {
-  int i, j;
   // initial condition, boundary condition
-  for (i = 0; i < nx; i++) {
-    for (j = 0; j < nx; j++) {
+  for (int i = 0; i < nx; i++) {
+    for (int j = 0; j < nx; j++) {
       if (j == 0) {
         T[i][j] = cos(i * dx) * cos(i * dx);
       } else if (j == nx - 1) {
@@ -44,16 +43,14 @@ int initializeTemperature(doubleArray T, const int nx, const double dx) {
 
 int updateTemperatureOMP(doubleArray current, doubleArray next, const double k,
                          const int nx, const double dx, const double dt) {
-  // int i, j;
-  double laplaceT = 0;
-// int th_id = 0;
-
 // OpenMP parallel
 #pragma omp parallel for
   // update inner points [0,nx-1], [1,nx-2]
   for (int i = 0; i < nx; i++) {
-    // printf("Thread #%d is doing column %d.\n", th_id, j);
+    // int tid = omp_get_thread_num();
+    // printf("Thread #%d is doing row %d.\n", tid, i);
     for (int j = 1; j < nx - 1; j++) {
+      double laplaceT;
       if (i == 0) {
         // x=0
         laplaceT = (current[nx - 1][j] + current[i + 1][j] + current[i][j - 1] +
@@ -111,8 +108,8 @@ int writeFile(string fileName, doubleArray T, const int nx) {
 
 int main(int argc, char *argv[]) {
   // time start
-  clock_t start = clock();
-  // double start = omp_get_wtime();
+  // clock_t start = clock();
+  double start = omp_get_wtime();
 
   // input check
   if (argc != 3) {
@@ -121,6 +118,8 @@ int main(int argc, char *argv[]) {
   }
   const int nx = atoi(argv[1]);
   const int nthreads = atoi(argv[2]);
+
+  omp_set_num_threads(nthreads); // set the number of threads
 
   // set parameters for heat equation
   const double k = 1;
@@ -142,7 +141,6 @@ int main(int argc, char *argv[]) {
   initializeTemperature(current, nx, dx);
 
   // solve heat equation
-  omp_set_num_threads(nthreads); // set the number of threads
   doubleArray ptrTemp;
   for (int n = 0; n < nt; n++) {
     updateTemperatureOMP(current, next, k, nx, dx, dt);
@@ -166,12 +164,12 @@ int main(int argc, char *argv[]) {
   freeArray(next, nx);
 
   // time stop
-  clock_t stop = clock();
-  double elapsed = (double)(stop - start) / CLOCKS_PER_SEC;
-  printf("nthreads = %d, nx = %d, time [seconds] = %.4f\n", nthreads, nx,
-         elapsed);
-  // printf("nthreads = %d, nx= %d, time [seconds] = %.4f\n", nthreads, nx,
-  //        omp_get_wtime() - start);
+  // clock_t stop = clock();
+  // double elapsed = (double)(stop - start) / CLOCKS_PER_SEC;
+  // printf("nthreads = %d, nx = %d, time [seconds] = %.4f\n", nthreads, nx,
+  //        elapsed);
+  printf("nthreads = %d, nx= %d, time [seconds] = %.4f\n", nthreads, nx,
+         omp_get_wtime() - start);
 
   // end the program
   return 0;

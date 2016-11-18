@@ -47,8 +47,8 @@ int initializeTemperatureMPI(doubleArray T, const int nproc, const int nx,
 
 int updateTemperatureMPI(doubleArray current, doubleArray next, const double k,
                          const int nproc, const int nx, const double dx,
-                         const double dt, const double *left,
-                         const double *right) {
+                         const double dt, const double *leftGhost,
+                         const double *rightGhost) {
   int i, j;
   double laplaceT = 0;
   // update inner points [0,nx-1], [1,nx-2]
@@ -56,12 +56,12 @@ int updateTemperatureMPI(doubleArray current, doubleArray next, const double k,
     for (j = 1; j < nx - 1; j++) {
       if (i == 0) {
         // x=0
-        laplaceT = (left[j] + current[i + 1][j] + current[i][j - 1] +
+        laplaceT = (leftGhost[j] + current[i + 1][j] + current[i][j - 1] +
                     current[i][j + 1] - 4 * current[i][j]) /
                    (dx * dx);
       } else if (i == nproc - 1) {
         // x= pi
-        laplaceT = (current[i - 1][j] + right[j] + current[i][j - 1] +
+        laplaceT = (current[i - 1][j] + rightGhost[j] + current[i][j - 1] +
                     current[i][j + 1] - 4 * current[i][j]) /
                    (dx * dx);
       } else {
@@ -133,68 +133,78 @@ int main(int argc, char *argv[]) {
          dt);
 
   // declare parameters for MPI process
-  int size, rank;          // total processes, current process rank
-  int leftRank, rightRank; // left side (previous rank), right side (next rank)
-  int rc, nproc; // MPI initial, domain decomposition (columns per process)
+  int numtasks, rank, rc; // total processes, current process rank
+  int leftRank,
+      rightRank; // leftGhost side (previous rank), rightGhost side (next rank)
+  int nproc;     // domain decomposition (columns per process)
   double x0proc, averageT; // origin of current subdomain, average T current
-  MPI_Status stats;
-  double left[nx], right[nx]; // left/right ghost boundary of current subdomain
-  double leftSend[nx], rightSend[nx]; // left/right boundary, current subdomain
+  double leftGhost[nx], rightGhost[nx]; // leftGhost/rightGhost ghost boundary
+                                        // of current subdomain
+  double leftBoundary[nx], rightBoundary[nx]; // l/r boundary of the subdomain
 
   // MPI parallel
+  MPI_Status Stat;
   rc = MPI_Init(&argc, &argv);
   if (rc != MPI_SUCCESS) {
-    cout << "Can't not start MPI" << endl;
+    printf("Error starting MPI program. Terminating.\n");
     MPI_Abort(MPI_COMM_WORLD, rc);
   }
-  // get current rank, and total number of processes
-  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  printf("Number of tasks= %d My rank= %d\n", numtasks, rank);
 
-  // left side (previous rank), right side (next rank)
+  // leftGhost side (previous rank), rightGhost side (next rank)
   leftRank = rank - 1;
   rightRank = rank + 1;
   if (rank == 0) {
-    leftRank = size - 1;
+    leftRank = numtasks - 1;
   }
-  if (rank == size - 1) {
+  if (rank == numtasks - 1) {
     rightRank = 0;
   }
 
   // initialize subdomain temperature arrays, and allocate memory
-  nproc = (int)nx / size; // size of subdomain (col)nproc*nx(row)
+  nproc = (int)nx / numtasks; // numtasks of subdomain (col)nproc*nx(row)
   doubleArray next = allocateArrayMPI(nproc, nx);
   doubleArray current = allocateArrayMPI(nproc, nx);
 
   // initialize Temperature
-  x0proc = rank * PI / size; // left origion of current subdomain
+  x0proc = rank * PI / numtasks; // leftGhost origion of current subdomain
   initializeTemperatureMPI(next, nproc, nx, x0proc, dx);
   initializeTemperatureMPI(current, nproc, nx, x0proc, dx);
-  printf("size=%d,nproc=%d,rank=%d,x0proc=%.4f\n", size, nproc, rank, x0proc);
+  printf("numtasks=%d,nproc=%d,rank=%d,x0proc=%.4f\n", numtasks, nproc, rank,
+         x0proc);
 
   // solve heat equation
   doubleArray ptrTemp;
-  int temp = 0;
+  int tag = 0;
   for (int n = 0; n < nt; n++) {
-    // setup leftSend, rightSend
+    // setup leftBoundary, rightBoundary
     for (int j = 0; j < nx; j++) {
-      leftSend[j] = current[0][j];
-      rightSend[j] = current[nproc - 1][j];
+      leftBoundary[j] = current[0][j];
+      rightBoundary[j] = current[nproc - 1][j];
     }
-    // send left/right boundary information among processors
-    MPI_Send(&leftSend, nx, MPI_DOUBLE, leftRank, temp, MPI_COMM_WORLD);
-    MPI_Recv(&right, nx, MPI_DOUBLE, rightRank, temp, MPI_COMM_WORLD, &stats);
+    // send leftGhost/rightGhost boundary information among processors
+    MPI_Send(&leftBoundary, nx, MPI_DOUBLE, leftRank, tag, MPI_COMM_WORLD);
+    MPI_Recv(&rightGhost, nx, MPI_DOUBLE, rightRank, tag, MPI_COMM_WORLD,
+             &Stat);
 
-    MPI_Send(&rightSend, nx, MPI_DOUBLE, rightRank, temp, MPI_COMM_WORLD);
-    MPI_Recv(&left, nx, MPI_DOUBLE, leftRank, temp, MPI_COMM_WORLD, &stats);
+    MPI_Send(&rightBoundary, nx, MPI_DOUBLE, rightRank, tag, MPI_COMM_WORLD);
+    MPI_Recv(&leftGhost, nx, MPI_DOUBLE, leftRank, tag, MPI_COMM_WORLD, &Stat);
 
     // update temperature at current rank
-    updateTemperatureMPI(current, next, k, nproc, nx, dx, dt, left, right);
+    updateTemperatureMPI(current, next, k, nproc, nx, dx, dt, leftGhost,
+                         rightGhost);
     // switch old and new Temperature
     ptrTemp = current;
     current = next;
     next = ptrTemp;
   }
+
+  int count;
+  rc = MPI_Get_count(&Stat, MPI_CHAR, &count);
+  printf("Task %d: Received %d double(s) from task %d with tag %d \n", rank,
+         count, Stat.MPI_SOURCE, Stat.MPI_TAG);
 
   // average Temperature
   double aveTemp = averageTemperatureMPI(next, nproc, nx);
@@ -202,7 +212,7 @@ int main(int argc, char *argv[]) {
 
   // write final temperature to files
   char fileName[50];
-  sprintf(fileName, "heat_mpi_nx%d_nth%d_rank%d.dat", nx, size, rank);
+  sprintf(fileName, "heat_mpi_nx%d_nth%d_rank%d.dat", nx, numtasks, rank);
   writeFileMPI(fileName, next, nproc, nx);
 
   // end MPI
