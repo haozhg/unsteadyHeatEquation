@@ -44,12 +44,16 @@ int initializeTemperature(doubleArray T, const int nx, const double dx) {
 
 int updateTemperatureOMP(doubleArray current, doubleArray next, const double k,
                          const int nx, const double dx, const double dt) {
-  int i, j;
+  // int i, j;
   double laplaceT = 0;
+// int th_id = 0;
+
+// OpenMP parallel
 #pragma omp parallel for
   // update inner points [0,nx-1], [1,nx-2]
-  for (i = 0; i < nx; i++) {
-    for (j = 1; j < nx - 1; j++) {
+  for (int i = 0; i < nx; i++) {
+    // printf("Thread #%d is doing column %d.\n", th_id, j);
+    for (int j = 1; j < nx - 1; j++) {
       if (i == 0) {
         // x=0
         laplaceT = (current[nx - 1][j] + current[i + 1][j] + current[i][j - 1] +
@@ -129,7 +133,7 @@ int main(int argc, char *argv[]) {
   printf("nthreads=%d, k=%f, x=%f, t=%f, nx=%d, nt=%d, dx=%f, dt=%f\n",
          nthreads, k, PI, t, nx, nt, dx, dt);
 
-  // allocate memory
+  // declare array, and allocate memory
   doubleArray next = allocateArray(nx);
   doubleArray current = allocateArray(nx);
 

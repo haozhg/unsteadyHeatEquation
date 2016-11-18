@@ -1,4 +1,0 @@
-k=1.000000, x=3.141593, t=4.934802, nx=128, nt=53121, dx=0.024544, dt=0.000075
-rank=0,size=1,nproc=128,xproc=0.0000
-Average temperature = 0.4931
-nx = 128, time [seconds] = 11.6100

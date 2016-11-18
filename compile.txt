@@ -1,0 +1,20 @@
+Local to remote directory
+
+scp -r unsteadyHeatEquation haozhang@adroit.princeton.edu:~/APC524/HW4/
+
+
+Local
+
+g++ -o heat_serial heat_serial.cc updateTserial.cc doubleArray.cc initializeT.cc writeFile.cc averageT.cc
+
+c++ -o heat_serial heat_serial.cc updateTserial.cc doubleArray.cc initializeT.cc writeFile.cc averageT.cc
+
+g++ -std=c++0x -o heat_serial heat_serial.cc updateTserial.cc doubleArray.cc initializeT.cc writeFile.cc averageT.cc
+
+c++ -std=c++0x -o heat_serial heat_serial.cc updateTserial.cc doubleArray.cc initializeT.cc writeFile.cc averageT.cc
+
+Cluster
+
+g++ -std=c++0x -o heat_serial heat_serial.cc updateTserial.cc doubleArray.cc initializeT.cc writeFile.cc averageT.cc
+
+c++ -std=c++0x -o heat_serial heat_serial.cc updateTserial.cc doubleArray.cc initializeT.cc writeFile.cc averageT.cc
