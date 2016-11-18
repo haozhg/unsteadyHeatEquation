@@ -14,4 +14,5 @@ module load openmpi
 for nx in 32 64 128
 do
     ./heat_omp $nx 8 > heat_omp.$nx.8.out
+    srun ./heat_mpi $nx > heat_mpi.$nx.8.out
 done

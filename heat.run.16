@@ -15,5 +15,5 @@ cd ~/APC524/HW4/unsteadyHeatEquation
 module load openmpi
 for nx in 32 64 128
 do
-    ./heat_omp $nx 16 > heat_omp.$nx.16.out
+    srun ./heat_mpi $nx > heat_mpi.$nx.16.out
 done

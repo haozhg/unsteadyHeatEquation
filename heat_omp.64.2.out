@@ -1,0 +1,3 @@
+nthreads=2, k=1.000000, x=3.141593, t=4.934802, nx=64, nt=13280, dx=0.049087, dt=0.000301
+Average temperature = 0.4293
+nthreads = 2, nx = 64, time [seconds] = 4.2200

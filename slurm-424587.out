@@ -1,0 +1,6 @@
+srun: error: adroit-04: tasks 0-1: Segmentation fault
+srun: Terminating job step 424587.0
+srun: error: adroit-04: tasks 0-1: Segmentation fault
+srun: Terminating job step 424587.1
+srun: error: adroit-04: tasks 0-1: Segmentation fault
+srun: Terminating job step 424587.2

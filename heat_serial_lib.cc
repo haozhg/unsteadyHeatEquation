@@ -1,14 +1,10 @@
+#include "heat_serial_lib.h"
 #include <cmath>
 #include <fstream>
 #include <iostream>
-#include <stdio.h>
 #include <stdlib.h>
-#include <string>
-using namespace std;
 
-typedef double **doubleArray;
-
-doubleArray allocateArray(const int nx) {
+doubleArray allocateArray(int nx) {
   doubleArray T = new double *[nx];
   for (int i = 0; i < nx; i++) {
     T[i] = new double[nx];
@@ -16,7 +12,7 @@ doubleArray allocateArray(const int nx) {
   return T;
 }
 
-int freeArray(doubleArray array, const int nx) {
+int freeArray(doubleArray array, int nx) {
   for (int i = 0; i < nx; i++) {
     delete[] array[i];
   }
@@ -60,6 +56,7 @@ int updateTemperatureSerial(doubleArray current, doubleArray next,
                     current[i][j + 1] - 4 * current[i][j]) /
                    (dx * dx);
       } else {
+        // center difference
         laplaceT = (current[i - 1][j] + current[i + 1][j] + current[i][j - 1] +
                     current[i][j + 1] - 4 * current[i][j]) /
                    (dx * dx);
@@ -83,7 +80,7 @@ double averageTemperature(doubleArray T, const int nx) {
   return aveT;
 }
 
-int writeFile(string fileName, doubleArray T, const int nx) {
+int writerFile(string fileName, doubleArray T, int nx) {
   int i, j;
   ofstream output(fileName);
   if (output.is_open()) {
@@ -101,68 +98,5 @@ int writeFile(string fileName, doubleArray T, const int nx) {
   } else {
     cout << "Unable to open file!\n";
   }
-  return 0;
-}
-
-int main(int argc, char *argv[]) {
-
-  // time start
-  clock_t start = clock();
-
-  // input check
-  if (argc != 2) {
-    printf("USAGE: %s <nx>\n", argv[0]);
-    exit(1);
-  }
-  const int nx = atoi(argv[1]);
-
-  // set parameters for heat equation
-  const double k = 1;
-  const double PI = 2 * acos(0);
-  const double t = 0.5 * PI * PI / k;
-  const double dx = PI / nx;
-  // for numerical stability, dt < dx^2/(4k)
-  const double dt = 0.5 * dx * dx / (4 * k);
-  const int nt = (int)t / dt;
-  printf("k=%f, x=%f, t=%f, nx=%d, nt=%d, dx=%f, dt=%f\n", k, PI, t, nx, nt, dx,
-         dt);
-
-  // allocate memory
-  doubleArray next = allocateArray(nx);
-  doubleArray current = allocateArray(nx);
-
-  // initialize Temperature
-  initializeTemperature(next, nx, dx);
-  initializeTemperature(current, nx, dx);
-
-  // solve heat equation
-  doubleArray ptrTemp;
-  for (int n = 0; n < nt; n++) {
-    updateTemperatureSerial(current, next, k, nx, dx, dt);
-    // switch old and new Temperature
-    ptrTemp = current;
-    current = next;
-    next = ptrTemp;
-  }
-
-  // average Temperature
-  double aveTemp = averageTemperature(next, nx);
-  printf("Average temperature = %.4f\n", aveTemp);
-
-  // write final temperature to files
-  char fileName[50];
-  sprintf(fileName, "heat_serial_nx%d.dat", nx);
-  writeFile(fileName, next, nx);
-
-  // free memroy
-  freeArray(current, nx);
-  freeArray(next, nx);
-
-  // time stop
-  clock_t stop = clock();
-  double elapsed = (double)(stop - start) / CLOCKS_PER_SEC;
-  printf("nx = %d, time [seconds] = %.4f\n", nx, elapsed);
-
-  // end the program
   return 0;
 }
