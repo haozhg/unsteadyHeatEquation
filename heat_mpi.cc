@@ -93,9 +93,9 @@ int writeFileMPI(string fileName, doubleArray T, const int nproc,
   int i, j;
   ofstream output(fileName);
   if (output.is_open()) {
-    for (j = 0; j < nproc; j++) {
-      for (i = 0; i < nx; i++) {
-        if (i < nx - 1) {
+    for (j = 0; j < nx; j++) {
+      for (i = 0; i < nproc; i++) {
+        if (i < nproc - 1) {
           output << T[i][j] << ", ";
         } else {
           output << T[i][j];
@@ -183,7 +183,7 @@ int main(int argc, char *argv[]) {
 
   // solve heat equation
   doubleArray ptrTemp;
-  int tag1 = 1, tag2 = 2, count;
+  int tag1 = 1, tag2 = 2;
   for (int n = 0; n < nt; n++) {
     // setup leftBoundary, rightBoundary
     for (int j = 0; j < nx; j++) {
@@ -192,27 +192,13 @@ int main(int argc, char *argv[]) {
     }
     // send left boundary, and leftRank receive right ghost boundary
     MPI_Send(&leftBoundary, nx, MPI_DOUBLE, leftRank, tag1, MPI_COMM_WORLD);
-    printf("n/nt = %d/%d, left rank %d rightGhost <---- %d double(s) ---- "
-           "leftBoundary current rank %d\n",
-           n, nt, leftRank, nx, rank);
-
     MPI_Recv(&rightGhost, nx, MPI_DOUBLE, rightRank, tag1, MPI_COMM_WORLD,
              &Stat);
-    printf("n/nt = %d/%d, current rank %d rightGhost <---- %d double(s) ---- "
-           "leftBoundary right rank %d\n",
-           n, nt, rank, nx, rightRank);
 
     // send right boundary to rightRank, and rightRank receive left ghost
     // boundary
     MPI_Send(&rightBoundary, nx, MPI_DOUBLE, rightRank, tag2, MPI_COMM_WORLD);
-    printf("n/nt = %d/%d, current rank %d rightBoundary ---- %d double(s) "
-           "----> leftGhost right rank %d\n",
-           n, nt, rank, nx, rightRank);
-
     MPI_Recv(&leftGhost, nx, MPI_DOUBLE, leftRank, tag2, MPI_COMM_WORLD, &Stat);
-    printf("n/nt = %d/%d, left rank %d rightBoundary ---- %d double(s) ----> "
-           "leftGhost current rank %d\n",
-           n, nt, leftRank, nx, rank);
 
     // update temperature at current rank
     updateTemperatureMPI(current, next, k, nproc, nx, dx, dt, leftGhost,

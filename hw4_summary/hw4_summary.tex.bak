@@ -1,0 +1,28 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx,caption,subcaption,float}
+\usepackage[colorinlistoftodos]{todonotes}
+
+\title{APC 524 / AST 506 / MAE 506 Software engineering for scientific computing
+\\Assignment 4: Parallel programming with OpenMP and MPI}
+
+\author{Hao Zhang, MAE, haozhang@princeton.edu}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Comparison of serial, OpenMP, and MPI}
+This is a plot that compares
+
+\begin{figure}[H]
+        \centering
+        \includegraphics[width=.33\linewidth]{./Figure/heat_serial_nx64.png}
+        \caption{Serial code, nx=64}
+\end{figure}
+
+\end{document}
