@@ -17,7 +17,7 @@
 \maketitle
 
     \section{Computation time}
-    It's found that OpenMP and MPI produces nearly-linear speed-up. With the increase of threads, the speed-up is limited by process that can not be (easily) parallelized(i.e., I/O process).
+    It's found that OpenMP and MPI produces nearly-linear speed-up. With the increase of threads, the perfect linear speed-up is actually limited by process that can not be (easily) parallelized(i.e., I/O process).
       \begin{figure}[H]
             \centering 
             \includegraphics[width=0.5\textwidth]{./Figure/computation_time.png} 
