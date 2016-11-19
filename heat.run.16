@@ -2,7 +2,7 @@
 # Parallel job using 16 processors:
 #SBATCH -N 2
 #SBATCH --ntasks-per-node=8
-#SBATCH -t 0:15:00
+#SBATCH -t 0:05:00
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
 #SBATCH --mail-type=fail
@@ -13,7 +13,7 @@ cd ~/APC524/HW4/unsteadyHeatEquation
 
 # Load openmpi environment
 module load openmpi
-for nx in 128 256 512
+for nx in 64 128 256
 do
     srun ./heat_mpi $nx > heat_mpi.$nx.16.out
 done
