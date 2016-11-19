@@ -4,7 +4,7 @@ clear all
 clc
 
 %% read data
-T = csvread('heat_omp_nx128_nth8.dat');
+T = csvread('heat_mpi_nx128_nth2_rank0.dat');
 [nx,~] = size(T);
 Tmean = mean(mean(T));
 x = linspace(0,pi,nx);

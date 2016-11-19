@@ -1,5 +1,0 @@
-scp -r ./unsteadyHeatEquation haozhang@adroit.princeton.edu:~/APC524/HW4/
-
-scp haozhang@adroit.princeton.edu:~/APC524/HW4/unsteadyHeatEquation/heat_omp_nx32_nth1.dat ./
-
-scp -r haozhang@adroit.princeton.edu:~/APC524/HW4/unsteadyHeatEquation ./

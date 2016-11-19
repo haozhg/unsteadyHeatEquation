@@ -151,7 +151,12 @@ int main(int argc, char *argv[]) {
   }
   MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  printf("Number of tasks= %d My rank= %d\n", numtasks, rank);
+  if (nx % numtasks != 0) {
+    printf("nx=%d can not be divided into numtasks=%d groups. Terminating.\n",
+           nx, numtasks);
+    MPI_Abort(MPI_COMM_WORLD, rc);
+  }
+  // printf("Number of tasks= %d My rank= %d\n", numtasks, rank);
 
   // leftGhost side (previous rank), rightGhost side (next rank)
   leftRank = rank - 1;
@@ -184,11 +189,11 @@ int main(int argc, char *argv[]) {
       leftBoundary[j] = current[0][j];
       rightBoundary[j] = current[nproc - 1][j];
     }
-    // send leftGhost/rightGhost boundary information among processors
+    // send left boundary, and receive right ghost boundary
     MPI_Send(&leftBoundary, nx, MPI_DOUBLE, leftRank, tag, MPI_COMM_WORLD);
     MPI_Recv(&rightGhost, nx, MPI_DOUBLE, rightRank, tag, MPI_COMM_WORLD,
              &Stat);
-
+    // send right boundary, and receive left ghost boundary
     MPI_Send(&rightBoundary, nx, MPI_DOUBLE, rightRank, tag, MPI_COMM_WORLD);
     MPI_Recv(&leftGhost, nx, MPI_DOUBLE, leftRank, tag, MPI_COMM_WORLD, &Stat);
 
@@ -202,7 +207,7 @@ int main(int argc, char *argv[]) {
   }
 
   int count;
-  rc = MPI_Get_count(&Stat, MPI_CHAR, &count);
+  rc = MPI_Get_count(&Stat, MPI_DOUBLE, &count);
   printf("Task %d: Received %d double(s) from task %d with tag %d \n", rank,
          count, Stat.MPI_SOURCE, Stat.MPI_TAG);
 
@@ -214,6 +219,7 @@ int main(int argc, char *argv[]) {
   char fileName[50];
   sprintf(fileName, "heat_mpi_nx%d_nth%d_rank%d.dat", nx, numtasks, rank);
   writeFileMPI(fileName, next, nproc, nx);
+  printf("Output file, heat_mpi_nx%d_nth%d_rank%d.dat\n", nx, numtasks, rank);
 
   // end MPI
   MPI_Finalize();
