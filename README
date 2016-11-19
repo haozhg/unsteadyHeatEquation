@@ -1,8 +1,30 @@
 
+******************************************************************************************
 APC 524 / AST 506 / MAE 506 Software engineering for scientific computing
 Assignment 4: Parallel programming with OpenMP and MPI
-
+******************************************************************************************
 Author: Hao Zhang, MAE, Princeton University
 Date: 11/15/2016
+******************************************************************************************
+Project description: we solve unsteady heat equation with both serial codes and parallel computing. A comparison between OpenMP and MPI is also presented.
+******************************************************************************************
 
-This project solves unsteady heat equation with both serial codes and parallel computing. A comparison between OpenMP and MPI is also presented.
+List of all the files in this folder:
+
+hw4_summary.pdf: A document containing the relevant plots, and brief discussion of advantages and disadvantages of your OpenMP and MPI implementations.
+
+heat_serial.cc: Source code for serial implementations.
+
+heat_omp.cc: Source code for OpenMP implementations.
+
+heat_mpi.cc: Source code for MPI implementations.
+
+Makefile: Makefile to build the above sources.
+
+heat.run.1, heat.run.2, heat.run.4, heat.run.8, heat.run.16: Slurm job submission files to run all jobs.
+
+TemperatureVisualize.m: Matlab script that reads in temperature file, and visualize temperature field.
+
+heat_serial_nx64.png: An visualization of data produced by serial code with grid size 64*64.
+
+README: The file you are reading now.

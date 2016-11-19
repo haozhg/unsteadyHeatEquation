@@ -156,6 +156,7 @@ int main(int argc, char *argv[]) {
            nx, numtasks);
     MPI_Abort(MPI_COMM_WORLD, rc);
   }
+  printf("rank =%d, MPI starting...\n", rank);
   // printf("Number of tasks= %d My rank= %d\n", numtasks, rank);
 
   // leftGhost side (previous rank), rightGhost side (next rank)
@@ -182,38 +183,50 @@ int main(int argc, char *argv[]) {
 
   // solve heat equation
   doubleArray ptrTemp;
-  int tag = 0;
+  int tag1 = 1, tag2 = 2, count;
   for (int n = 0; n < nt; n++) {
     // setup leftBoundary, rightBoundary
     for (int j = 0; j < nx; j++) {
       leftBoundary[j] = current[0][j];
       rightBoundary[j] = current[nproc - 1][j];
     }
-    // send left boundary, and receive right ghost boundary
-    MPI_Send(&leftBoundary, nx, MPI_DOUBLE, leftRank, tag, MPI_COMM_WORLD);
-    MPI_Recv(&rightGhost, nx, MPI_DOUBLE, rightRank, tag, MPI_COMM_WORLD,
+    // send left boundary, and leftRank receive right ghost boundary
+    MPI_Send(&leftBoundary, nx, MPI_DOUBLE, leftRank, tag1, MPI_COMM_WORLD);
+    printf("n/nt = %d/%d, left rank %d rightGhost <---- %d double(s) ---- "
+           "leftBoundary current rank %d\n",
+           n, nt, leftRank, nx, rank);
+
+    MPI_Recv(&rightGhost, nx, MPI_DOUBLE, rightRank, tag1, MPI_COMM_WORLD,
              &Stat);
-    // send right boundary, and receive left ghost boundary
-    MPI_Send(&rightBoundary, nx, MPI_DOUBLE, rightRank, tag, MPI_COMM_WORLD);
-    MPI_Recv(&leftGhost, nx, MPI_DOUBLE, leftRank, tag, MPI_COMM_WORLD, &Stat);
+    printf("n/nt = %d/%d, current rank %d rightGhost <---- %d double(s) ---- "
+           "leftBoundary right rank %d\n",
+           n, nt, rank, nx, rightRank);
+
+    // send right boundary to rightRank, and rightRank receive left ghost
+    // boundary
+    MPI_Send(&rightBoundary, nx, MPI_DOUBLE, rightRank, tag2, MPI_COMM_WORLD);
+    printf("n/nt = %d/%d, current rank %d rightBoundary ---- %d double(s) "
+           "----> leftGhost right rank %d\n",
+           n, nt, rank, nx, rightRank);
+
+    MPI_Recv(&leftGhost, nx, MPI_DOUBLE, leftRank, tag2, MPI_COMM_WORLD, &Stat);
+    printf("n/nt = %d/%d, left rank %d rightBoundary ---- %d double(s) ----> "
+           "leftGhost current rank %d\n",
+           n, nt, leftRank, nx, rank);
 
     // update temperature at current rank
     updateTemperatureMPI(current, next, k, nproc, nx, dx, dt, leftGhost,
                          rightGhost);
+
     // switch old and new Temperature
     ptrTemp = current;
     current = next;
     next = ptrTemp;
   }
 
-  int count;
-  rc = MPI_Get_count(&Stat, MPI_DOUBLE, &count);
-  printf("Task %d: Received %d double(s) from task %d with tag %d \n", rank,
-         count, Stat.MPI_SOURCE, Stat.MPI_TAG);
-
   // average Temperature
   double aveTemp = averageTemperatureMPI(next, nproc, nx);
-  printf("Average temperature = %.4f\n", aveTemp);
+  printf("current rank = %d, Average temperature = %.4f\n", rank, aveTemp);
 
   // write final temperature to files
   char fileName[50];

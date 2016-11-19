@@ -4,7 +4,7 @@ clear all
 clc
 
 %% read data
-T = csvread('heat_mpi_nx128_nth2_rank0.dat');
+T = csvread('heat_serial_nx64.dat');
 [nx,~] = size(T);
 Tmean = mean(mean(T));
 x = linspace(0,pi,nx);
@@ -23,7 +23,7 @@ xlim([0,pi]), ylim([0,pi]), zlim([0,1])
 %axis equal, box on
 set(gca,'FontSize',20,'LineWidth',2)
 set(gcf, 'Color', 'w');
-saveas(gcf,'heat_serial_64.png');
+saveas(gcf,'heat_serial_nx64.png');
 
 %% visualize data, 2D contourf
 figure
@@ -35,4 +35,4 @@ colormap(jet), colorbar
 axis equal, box on
 set(gca,'FontSize',20,'LineWidth',2)
 set(gcf, 'Color', 'w');
-saveas(gcf,'heat_serial_64.png');
+saveas(gcf,'heat_serial_nx64.png');

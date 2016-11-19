@@ -13,7 +13,7 @@ cd ~/APC524/HW4/unsteadyHeatEquation
 
 # Load openmpi environment
 module load openmpi
-for nx in 32 64 128
+for nx in 128 256 512
 do
     srun ./heat_mpi $nx > heat_mpi.$nx.16.out
 done

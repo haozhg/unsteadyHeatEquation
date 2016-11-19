@@ -158,6 +158,7 @@ int main(int argc, char *argv[]) {
   char fileName[50];
   sprintf(fileName, "heat_omp_nx%d_nth%d.dat", nx, nthreads);
   writeFile(fileName, next, nx);
+  printf("Output file, heat_omp_nx%d_nth%d.dat", nx, nthreads);
 
   // free memroy
   freeArray(current, nx);
