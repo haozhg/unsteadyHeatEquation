@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  19 NOV 2016 01:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  19 NOV 2016 01:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -878,51 +878,115 @@ Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
 
 ABD: EveryShipout initializing macros
-<./Figure/heat_serial_nx128.png, id=4, 562.2606pt x 421.575pt>
+<./Figure/computation_time.png, id=4, 562.2606pt x 421.575pt>
+File: ./Figure/computation_time.png Graphic file (type png)
+
+<use ./Figure/computation_time.png>
+Package pdftex.def Info: ./Figure/computation_time.png used on input line 23.
+(pdftex.def)             Requested size: 172.5pt x 129.33603pt.
+
+<./Figure/heat_serial_nx128.png, id=5, 562.2606pt x 421.575pt>
 File: ./Figure/heat_serial_nx128.png Graphic file (type png)
 
 <use ./Figure/heat_serial_nx128.png>
-Package pdftex.def Info: ./Figure/heat_serial_nx128.png used on input line 25.
+Package pdftex.def Info: ./Figure/heat_serial_nx128.png used on input line 33.
 (pdftex.def)             Requested size: 110.40253pt x 82.77608pt.
 
-<./Figure/heat_omp_nx128_nth1.png, id=5, 562.2606pt x 421.575pt>
+<./Figure/heat_omp_nx128_nth1.png, id=6, 562.2606pt x 421.575pt>
 File: ./Figure/heat_omp_nx128_nth1.png Graphic file (type png)
 
 <use ./Figure/heat_omp_nx128_nth1.png>
-Package pdftex.def Info: ./Figure/heat_omp_nx128_nth1.png used on input line 30
+Package pdftex.def Info: ./Figure/heat_omp_nx128_nth1.png used on input line 38
 .
 (pdftex.def)             Requested size: 110.40253pt x 82.77608pt.
 
-<./Figure/heat_mpi_nx128_nth1_rank0.png, id=6, 562.2606pt x 421.575pt>
-File: ./Figure/heat_mpi_nx128_nth1_rank0.png Graphic file (type png)
+<./Figure/heat_mpi_nx128_nth1.png, id=7, 562.2606pt x 421.575pt>
+File: ./Figure/heat_mpi_nx128_nth1.png Graphic file (type png)
 
-<use ./Figure/heat_mpi_nx128_nth1_rank0.png>
-Package pdftex.def Info: ./Figure/heat_mpi_nx128_nth1_rank0.png used on input l
-ine 35.
+<use ./Figure/heat_mpi_nx128_nth1.png>
+Package pdftex.def Info: ./Figure/heat_mpi_nx128_nth1.png used on input line 43
+.
 (pdftex.def)             Requested size: 110.40253pt x 82.77608pt.
  [1
 
 {/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./Figur
-e/heat_serial_nx128.png (PNG copy)> <./Figure/heat_omp_nx128_nth1.png (PNG copy
-)> <./Figure/heat_mpi_nx128_nth1_rank0.png (PNG copy)>] (./hw4_summary.aux) ) 
+e/computation_time.png (PNG copy)>]
+<./Figure/heat_omp_nx128_nth2.png, id=17, 562.2606pt x 421.575pt>
+File: ./Figure/heat_omp_nx128_nth2.png Graphic file (type png)
+
+<use ./Figure/heat_omp_nx128_nth2.png>
+Package pdftex.def Info: ./Figure/heat_omp_nx128_nth2.png used on input line 55
+.
+(pdftex.def)             Requested size: 110.40253pt x 82.77608pt.
+
+<./Figure/heat_omp_nx128_nth4.png, id=18, 562.2606pt x 421.575pt>
+File: ./Figure/heat_omp_nx128_nth4.png Graphic file (type png)
+
+<use ./Figure/heat_omp_nx128_nth4.png>
+Package pdftex.def Info: ./Figure/heat_omp_nx128_nth4.png used on input line 60
+.
+(pdftex.def)             Requested size: 110.40253pt x 82.77608pt.
+
+<./Figure/heat_omp_nx128_nth8.png, id=19, 562.2606pt x 421.575pt>
+File: ./Figure/heat_omp_nx128_nth8.png Graphic file (type png)
+
+<use ./Figure/heat_omp_nx128_nth8.png>
+Package pdftex.def Info: ./Figure/heat_omp_nx128_nth8.png used on input line 65
+.
+(pdftex.def)             Requested size: 110.40253pt x 82.77608pt.
+
+<./Figure/heat_mpi_nx128_nth2.png, id=20, 562.2606pt x 421.575pt>
+File: ./Figure/heat_mpi_nx128_nth2.png Graphic file (type png)
+
+<use ./Figure/heat_mpi_nx128_nth2.png>
+Package pdftex.def Info: ./Figure/heat_mpi_nx128_nth2.png used on input line 76
+.
+(pdftex.def)             Requested size: 110.40253pt x 82.77608pt.
+
+<./Figure/heat_mpi_nx128_nth4.png, id=21, 562.2606pt x 421.575pt>
+File: ./Figure/heat_mpi_nx128_nth4.png Graphic file (type png)
+
+<use ./Figure/heat_mpi_nx128_nth4.png>
+Package pdftex.def Info: ./Figure/heat_mpi_nx128_nth4.png used on input line 81
+.
+(pdftex.def)             Requested size: 110.40253pt x 82.77608pt.
+
+<./Figure/heat_mpi_nx128_nth8.png, id=22, 562.2606pt x 421.575pt>
+File: ./Figure/heat_mpi_nx128_nth8.png Graphic file (type png)
+
+<use ./Figure/heat_mpi_nx128_nth8.png>
+Package pdftex.def Info: ./Figure/heat_mpi_nx128_nth8.png used on input line 86
+.
+(pdftex.def)             Requested size: 110.40253pt x 82.77608pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
+
+ []
+
+[2 <./Figure/heat_serial_nx128.png (PNG copy)> <./Figure/heat_omp_nx128_nth1.pn
+g (PNG copy)> <./Figure/heat_mpi_nx128_nth1.png (PNG copy)> <./Figure/heat_omp_
+nx128_nth2.png (PNG copy)> <./Figure/heat_omp_nx128_nth4.png (PNG copy)> <./Fig
+ure/heat_omp_nx128_nth8.png (PNG copy)> <./Figure/heat_mpi_nx128_nth2.png (PNG 
+copy)> <./Figure/heat_mpi_nx128_nth4.png (PNG copy)> <./Figure/heat_mpi_nx128_n
+th8.png (PNG copy)>] [3] (./hw4_summary.aux) ) 
 Here is how much of TeX's memory you used:
- 14384 strings out of 493014
- 279280 string characters out of 6133351
- 323969 words of memory out of 5000000
- 17644 multiletter control sequences out of 15000+600000
- 8715 words of font info for 32 fonts, out of 8000000 for 9000
+ 14418 strings out of 493014
+ 280410 string characters out of 6133351
+ 325969 words of memory out of 5000000
+ 17671 multiletter control sequences out of 15000+600000
+ 8408 words of font info for 31 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,8n,77p,421b,495s stack positions out of 5000i,500n,10000p,200000b,80000s
-</
-usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></u
-sr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
-/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/l
-ocal/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/loc
-al/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on hw4_summary.pdf (1 page, 425715 bytes).
+ 62i,9n,77p,421b,494s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2016/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2016/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2016/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2016/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2016/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on hw4_summary.pdf (3 pages, 1276965 bytes).
 PDF statistics:
- 34 PDF objects out of 1000 (max. 8388607)
- 22 compressed objects within 1 object stream
+ 47 PDF objects out of 1000 (max. 8388607)
+ 26 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 28 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 63 words of extra memory for PDF output out of 10000 (max. 10000000)
 

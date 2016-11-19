@@ -16,8 +16,16 @@
 \begin{document}
 \maketitle
 
-\section{Comparison of serial, OpenMP, and MPI}
-\subsection{Single thread, Serial, OpenMP, MPI}
+    \section{Computation time}
+    It's found that OpenMP and MPI produces nearly-linear speed-up. With the increase of threads, the speed-up is limited by process that can not be (easily) parallelized(i.e., I/O process).
+      \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.5\textwidth]{./Figure/computation_time.png} 
+        \caption{Computation time of serial, OpenMP, MPI with respect to grid size}
+    \end{figure}
+    
+\section{Single thread, Serial vs OpenMP vs MPI}
+With a single thread, serial, OpenMP, and MPI takes almot the same computation time. The temperature field are visually identical.
       \begin{figure}[H]
         \centering
         \begin{subfigure}[b]{0.32\textwidth}   
@@ -32,13 +40,57 @@
         \
                 \begin{subfigure}[b]{0.32\textwidth}   
             \centering 
-            \includegraphics[width=\textwidth]{./Figure/heat_mpi_nx128_nth1_rank0.png} 
+            \includegraphics[width=\textwidth]{./Figure/heat_mpi_nx128_nth1.png} 
         \end{subfigure}
         \caption{Temperature field computed by serial, OpenMP, and MPI with a single thread, grid size $128\times128$}
     \end{figure}
     
-    \subsection{Multiple thread, OpenMP}
+    \section{OpenMP, multiple threads}
+    To parallel serial code with OpenMP, we only need to add a few new lines before the for loop. A header file "omp.h" also needs to be included. It's extremely easy to implement, and the gain is large(depending on the number of threads in the processor).
     
-    \subsection{Multiple thread, MPI}
+          \begin{figure}[H]
+        \centering
+        \begin{subfigure}[b]{0.32\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{./Figure/heat_omp_nx128_nth2.png} 
+        \end{subfigure}
+        \
+        \begin{subfigure}[b]{0.32\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{./Figure/heat_omp_nx128_nth4.png}  
+        \end{subfigure}
+        \
+                \begin{subfigure}[b]{0.32\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{./Figure/heat_omp_nx128_nth8.png} 
+        \end{subfigure}
+        \caption{Temperature field computed by OpenMP with a nthreads = 1,2,4, grid size $128\times128$}
+    \end{figure}
+    
+    \section{MPI, multiple threads}
+    When MPI is used to parallelize the updating step, domain decomposition is ultilized to divide tasks into small chunks. The boundary points are passed between various threads, by calling function MPI-Send() and MPI-Recv().
+              \begin{figure}[H]
+        \centering
+        \begin{subfigure}[b]{0.32\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{./Figure/heat_mpi_nx128_nth2.png} 
+        \end{subfigure}
+        \
+        \begin{subfigure}[b]{0.32\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{./Figure/heat_mpi_nx128_nth4.png}  
+        \end{subfigure}
+        \
+                \begin{subfigure}[b]{0.32\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{./Figure/heat_mpi_nx128_nth8.png} 
+        \end{subfigure}
+        \caption{Temperature field computed by MPI with a nthreads = 1,2,4, grid size $128\times128$}
+    \end{figure}
+    
+    \section{OpenMP vs MPI}
+OpenMP is very easy to use, we only need to add a few lines to the serial code and include "omp.h" header file. However, OpenMP only works on a single processor, so the number of threads are limited.\\
+
+MPI takes more effort to implement, and it's more error-prone. However, MPI in principle works for any systems. For example, it can make full use all the processors on one machine, and even combine the computation power of multiple machines.
     
 \end{document}
