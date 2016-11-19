@@ -25,7 +25,11 @@
 \maketitle
 
     \section{Computation time}
+<<<<<<< HEAD
    For the sake of time, we only consider grid size $nx=64,128,256$. It's found that OpenMP and MPI produce nearly-linear speed-up. With the increase of threads, the perfect linear speed-up is actually limited by process that can not be (easily) parallelized(i.e., I/O process).
+=======
+    It's found that OpenMP and MPI produces nearly-linear speed-up. With the increase of threads, the perfect linear speed-up is actually limited by process that can not be (easily) parallelized(i.e., I/O process).
+>>>>>>> e42861b141236da8b88833f527a2ee1c0c5a4535
       \begin{figure}[H]
             \centering 
             \includegraphics[width=0.8\textwidth]{./Figure/computation_time.png} 
